@@ -1,0 +1,54 @@
+<div class="am-panel am-panel-default am-g-fixed am-center">
+    <div class="am-panel-hd am-form-group">
+        <dt>
+            <i class="am-icon-folder-o am-icon-fw"></i>目录路径
+        </dt>
+        <input type="text" readonly class="am-form-field" value="{$rootPath}"/>
+
+    </div>
+    <dt class="am-panel-bd">
+        <i class="am-icon-files-o am-icon-fw"></i>文件
+    </dt>
+    <ul class="am-avg-sm-3">
+        <volist name="files" id="vo">
+            <li class="am-cf am-padding">
+                <switch name="vo.type">
+                    <case value="dir">
+                        <a href="{$vo|U='Media/browse_files',###}" data-ajax-btn>
+                            <i class="am-fl am-icon-folder-open-o am-icon-fw am-text-xxxl"></i>
+                            <span class="">
+                                <dt class="am-text-truncate">{$vo.file}</dt>
+                                <dd>文件夹</dd>
+                            </span>
+                        </a>
+                    </case>
+                    <case value="back">
+                        <a href="{$vo|U='Media/browse_files',###}" data-ajax-btn>
+                            <i class="am-fl am-icon-arrow-up am-icon-fw am-text-xxxl"></i>
+                            <dt class="am-text-truncate">{$vo.file}</dt>
+                            <dd>Get back</dd>
+                        </a>
+                    </case>
+                    <case value="gif|png|jpg">
+                        <i class="am-fl am-icon-file-image-o am-icon-fw am-text-xxxl"></i>
+                            <span class="">
+                                <dt class="am-text-truncate">{$vo.file}</dt>
+                                <dd>图片</dd>
+                            </span>
+                    </case>
+                    <default/>
+                    <i class="am-fl am-icon-file-o am-icon-fw am-text-xxxl"></i>
+                            <span class="">
+                                <dt class="am-text-truncate">{$vo.file}</dt>
+                                <dd>文件</dd>
+                            </span>
+                </switch>
+                </a>
+            </li>
+        </volist>
+    </ul>
+    <div class="am-panel-footer">
+        合计共:{$files|count}个文件
+    </div>
+</div>
+

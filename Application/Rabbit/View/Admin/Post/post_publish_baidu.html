@@ -1,0 +1,165 @@
+<form id="publishForm" method="post" action="<?php echo U('Admin/post_submit')?>">
+    <div id="postView{$post.id}" class="am-offcanvas">
+        <!--左侧内容-->
+        <div class="am-panel am-panel-default am-u-sm-offset-1 am-u-sm-8 am-margin am-animation-delay-1 am-animation-fade"
+             style="height: 94%;">
+        <span class="am-fr am-close am-padding" data-am-dismiss="offcanvas">
+                <i class="am-icon-close"></i>
+         </span>
+
+            <div class="am-panel-bd" style="height: 100%;">
+                <h4>内容标题<input class="am-form-field" type="text" name="postTitle"
+                               placeholder="输入需要发布的内容标题" value="{$post.title}"></h4>
+                <section id="frameLeft" style="height:80%;overflow-x:hidden;overflow-y:auto;margin-top: 12px;">
+                    <script id="container" name="postContent" type="text/plain">
+                        {$post.content|html_entity_decode}
+                    </script>
+                </section>
+            </div>
+        </div>
+        <div class="am-offcanvas-bar am-offcanvas-bar-flip" style="height: 100%;">
+            <div class="am-offcanvas-content am-text-center" style="overflow-y: auto;">
+                <h4>内容类型</h4>
+
+                <div class="am-g">
+                    <select name="postType" data-am-selected="{btnWidth: '100%',placeholder:'选择内容类型'}"
+                            minchecked="1">
+                        <option value="a" selected>PC电脑端网站</option>
+                        <option value="b">手机移动端网站</option>
+                        <option value="o">平板专用网站</option>
+                    </select>
+                </div>
+                <h4>内容栏目</h4>
+
+                <div class="am-g" style="z-index:2100">
+                    <select name="postCate" data-am-selected="{btnWidth:'100%',maxHeight: 400}">
+
+                        <?php $cateList=S('CATES_ALL');?>
+                        <volist name="cateList" id="cateOne">
+                            <option value="{$cateOne.id}"
+                            <?php echo ($post['category'] == $cateOne['id'])?"selected":"";?>>
+                            <for start="1" end="$cateOne.level">
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </for>
+                            <span class="am-icon-folder-open-o"></span>
+                            {$cateOne.name}
+                            </option>
+                        </volist>
+                    </select>
+                </div>
+                <empty name="post">
+                    <h4>发布日期</h4>
+                    <else/>
+                    <h4>更新日期</h4>
+                </empty>
+
+                <div class="am-form-group am-form-icon">
+                    <i class="am-icon-calendar"></i>
+                    <input name="postDate" type="text" class="am-form-field"
+                           placeholder="<?php echo date('Y-m-d',time())?>"
+                           value="<?php echo date('Y-m-d',time())?>"
+                           data-am-datepicker="{format: 'yyyy-mm-dd', viewMode: 'days'}" readonly>
+                </div>
+                <h4>作者</h4>
+
+                <div class="am-form-group am-form-icon">
+                    <i class="am-icon-user am-icon-fw"></i>
+                    <input name="postAuthor" type="text" class="am-form-field"
+                           placeholder="不填则为当前用户" value="{$post.author}"/>
+                </div>
+
+                <br>
+                <empty name="post">
+                    <input type="hidden" name="submitMod" value="insert"/>
+                    <button id="publishSubmit" class="am-btn am-btn-lg am-btn-success am-btn-block" type="submit">发布内容
+                    </button>
+                    <else/>
+                    <input type="hidden" name="submitMod" value="update"/>
+                    <input type="hidden" name="postId" value="{$post.id}"/>
+                    <button id="publishUpdateSubmit" class="am-btn am-btn-primary am-btn-l am-btn-block" type="submit"
+                            data-am-sticky="{height:'52px';}">修改内容
+                    </button>
+                </empty>
+                <h4>内容简介</h4>
+                    <textarea class="am-form-field" name="postSummary" class="am-padding"
+                              rows="4">{$post.summary}</textarea>
+                <h4>内容封面</h4>
+
+                <div class="am-form-group am-form-file">
+                    <button type="button" class="am-btn am-btn-danger am-btn-block">
+                        <i class="am-icon-cloud-upload"></i>选择要上传的封面
+                    </button>
+                    <input name="cateThumb" id="cateThumb" type="file"/>
+                    <img id="cateThumbImg" class="am-img-thumbnail" src="{$post.thumb}"/>
+                    <input name="PostThumbUrl" id="cateThumbUrl" type="hidden" value="{$post.thumb}"/>
+                </div>
+                <a href="javascript:;" id="cateThumbCancel" class="am-btn am-btn-block am-btn-danger">移除封面</a>
+
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        window.UEDITOR_HOME_URL = "__PUBLIC__/ueditor/";
+    </script>
+    <js href="__PUBLIC__/diavision/ueditor.config.js"/>
+    <js href="__PUBLIC__/ueditor/ueditor.all.min.js"/>
+    <js href="__PUBLIC__/ueditor/ueditor.parse.js"/>
+    <script type="text/javascript">
+        $(function () {
+            $layout = new tz_layout();
+            $layout.fullscreen($("#postView{$post.id}"), $(window));
+            $("#postView{$post.id}").offCanvas('open');
+            $("#postView{$post.id}").off('close.offcanvas.amui').off('click.offcanvas.amui');
+            $("#postView{$post.id} button[data-delete-post]").on("click", function (e) {
+                $('#postDelAlert').modal({
+                    relatedTarget: this,
+                    onConfirm: function (options) {
+                        var $link = $(this.relatedTarget);
+                        var msg = $link.length ? '你要删除的链接 ID 为 ' + $link.data('delete-post') : '确定了，但不知道要整哪样';
+                        $ajax = new tz_ajax();
+                        $ajax.url('__CONTROLLER__/post_del');
+                        $ajax.data("id=" + $link.data("delete-post"));
+                        $ajax.type("post").go().alert();
+                        $("#updatePostListBtn").click();
+                        $("#postView{$post.id}").offCanvas('close');
+                    },
+                    // closeOnConfirm: false,
+                    onCancel: function () {
+                        alert('三思而后行');
+                    }
+                });
+            })
+            var content = $("#container").html();
+            var ue =
+                    UE.getEditor('container', {
+                        "initialFrameHeight": $("#container").parent().height()-120,
+                        "autoHeightEnabled": false
+                    })
+            ue.addListener("ready", function () {
+                // editor准备好之后才可以使用
+                ue.setContent(content);
+            });
+        })
+    </script>
+
+    <script type="text/javascript">
+        $(function () {
+            $('#cateThumb').on('change', function () {
+                var cateThumb_ajax = new tz_ajax();
+                cateThumb_ajax.data({"filePath": $(this).val()}).url("<?php echo U('Admin/cateImgUpload');?>").type("post");
+                cateThumb_ajax.upload().done(function ($res, $sta) {
+                    $("#cateThumbImg").attr("src", $res);
+                    if ($sta == "success") {
+                        $("#cateThumbUrl").val($res);
+                    }
+                });
+            });
+            $('#cateThumbCancel').on("click", function () {
+                $("#cateThumbImg").attr("src", "");
+                $("#cateThumbUrl").val("");
+                return false;
+            })
+        })
+    </script>
+</form>
+

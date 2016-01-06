@@ -1,0 +1,48 @@
+<h2 class="am-text-center">{$title}</h2>
+<form class="am-form" method="post" action="__CONTROLLER__/website_information">
+    <fieldset>
+        <volist name="informations" id="vo">
+            <div class="am-form-group">
+                <label class="am-form-label">
+                    {$vo.key|__=###,"_"}
+                </label>
+                <switch name="vo.type">
+                    <case value="text">
+                        <input name="{$vo.key}" class="am-form-field" value="{$vo.value}"/>
+                    </case>
+                    <case value="textarea">
+                        <textarea name="{$vo.key}" rows="3" class="am-form-field" value="{$vo.value}"></textarea>
+                    </case>
+                    <case value="switch">
+                        <div class="am-form-group">
+                            <label class="am-checkbox-inline">
+                                <input type="radio" name="{$vo.key}" value="1" data-am-ucheck
+                                <if condition="vo.value eq '1'">
+                                    checked
+                                </if>
+                                />
+                                开启
+                            </label>
+                            <label class="am-checkbox-inline">
+                                <input type="radio" name="{$vo.key}" value="0" data-am-ucheck
+                                <if condition="$vo.value eq '0'">
+                                    checked
+                                </if>
+                                />
+                                关闭
+                            </label>
+                        </div>
+                    </case>
+
+                </switch>
+            </div>
+        </volist>
+        <div class="am-form-group">
+            <label>
+            </label>
+        </div>
+        <button type="submit" name="submit" href="__CONTROLLER__/website_information" class="am-btn am-btn-success am-u-sm-3" data-ajax-btn="{target:'#alert'}">
+            {$Think.lang.submit}
+        </button>
+    </fieldset>
+</form>

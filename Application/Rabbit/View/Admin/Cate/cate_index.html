@@ -1,0 +1,52 @@
+<div class="am-g-fixed am-center">
+    <div class="am-g">
+        <div class="am-u-sm-4 am-padding am-btn-group">
+            <button id="updateCateListBtn" class="am-hide am-btn am-btn-secondary">
+                更新栏目列表
+            </button>
+            <button id="clearInsertBtn" class="am-btn am-btn-success">
+                <i class="am-icon-fw am-icon-plus"></i>增加栏目
+            </button>
+        </div>
+        <form class="am-u-sm-4 am-padding" id="cateFilter">
+            <div class="am-input-group am-padding-right">
+                <input name="search" type="text" class="am-form-field">
+            <span class="am-input-group-btn">
+                <button class="am-btn am-btn-default" type="button">查找</button>
+            </span>
+            </div>
+        </form>
+    </div>
+    <div class="am-g">
+        <section class="am-u-sm-8" id="cateListSection">
+        </section>
+        <section class="am-u-sm-4" id="cateInsertSection">
+        </section>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        updateCateList();
+        updateCateInsert();
+        $("#updateCateListBtn").on("click", updateCateList);
+        $("#clearInsertBtn").on("click", updateCateInsert);
+        function updateCateList() {
+            $tz_ajax = new tz_ajax();
+            $tz_ajax.type("get");
+            $tz_ajax.data($("#cateFilter").serialize());
+            $tz_ajax.url('__CONTROLLER__/cate_list');
+            $('.am-popover').remove();
+            $tz_ajax.go().updateDom($("#cateListSection"));
+        }
+
+        function updateCateInsert() {
+            $tz_ajax = new tz_ajax();
+            $tz_ajax.type("get");
+            $tz_ajax.data($("#cateFilter").serialize());
+            $tz_ajax.url('__CONTROLLER__/cate_insert');
+            $('.am-popover').remove();
+            $tz_ajax.go().updateDom($("#cateInsertSection"));
+        }
+    });
+</script>
+

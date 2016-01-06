@@ -1,0 +1,115 @@
+<css href="__PUBLIC__/cropper/cropper.min.css"/>
+<js href="__PUBLIC__/cropper/cropper.min.js"/>
+<div id="avatarUpload" class="am-offcanvas">
+    <!--左侧内容-->
+    <div class="am-panel am-panel-default am-u-sm-offset-1 am-u-sm-8 am-margin" style="height: 94%;">
+        <span class="am-fr am-close am-padding" data-am-dismiss="offcanvas">
+                <i class="am-icon-close"></i>
+        </span>
+        <section id="postViewSection">
+            <h1 class="am-text-center">更换头像</h1>
+            <dd style="overflow-y: auto;height: 75%;margin-left:1em;">
+                <div class="am-thumbnail am-block" style="height: 380px">
+                    <img style="height:380px;" id="thumbImg"/>
+                </div>
+                <!--裁剪图片按钮组-->
+                <div class="am-btn-group am-center">
+                    <!--上传-->
+                    <button class="am-btn am-btn-danger am-form-group am-form-file">
+                        <i class="am-icon am-icon-fw am-icon-upload"></i>
+                        上传
+                        <input type="file" name="UploadImage" accept="image/*"/>
+                    </button>
+                    <!--清除上传-->
+                    <button id="cropperClear" class="am-btn am-btn-danger">
+                        <i class="am-icon am-icon-fw am-icon-eraser"></i>清除
+                    </button>
+                    <!--裁剪-->
+                    <button id="cropperSure" class="am-btn am-btn-success">
+                        <i class="am-icon am-icon-fw am-icon-crop"></i>裁剪
+                    </button>
+                </div>
+
+            </dd>
+        </section>
+        <small>
+            1.上传要作为头像的图片;<br>
+            2.拖动裁剪框,找到想要做成头像的部分;<br>
+            3.点击裁剪;<br>
+            4.提交确认;
+        </small>
+    </div>
+    <div class="am-offcanvas-bar am-offcanvas-bar-flip" style="height: 100%;">
+        <div class="am-offcanvas-content am-text-center" style="overflow-y: auto;">
+            <form class="am-form am-text-center" method="post" action="__CONTROLLER__/upload_avatar_submit">
+                <?php $user = S("USER_CUR");?>
+                <h2>原头像</h2>
+                <img src="{$user.avatar}" class="am-thumbnail" style="height: 128px;width: 128px;margin: auto"/>
+                <h2>修改后</h2>
+                <img id="userThumb" class="am-thumbnail" style="height: 128px;width: 128px;margin: auto"/>
+                <dt>大头像</dt>
+                <br>
+                <img id="userThumbMini" class="am-thumbnail" style="height: 64px;width: 64px;margin: auto"/>
+                <dd>小头像</dd>
+                <br>
+                <input type="hidden" name="userAvatar"/>
+                <button id="avatarSubmit" class="am-btn am-btn-block am-btn-success" type="submit">确定</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $layout = new tz_layout();
+        $layout.fullscreen($("#avatarUpload"), $(window));
+        $("#avatarUpload").offCanvas('open');
+        $("#avatarUpload").off('close.offcanvas.amui').off('click.offcanvas.amui');
+    })
+</script>
+<script type="text/javascript">
+    $(function () {
+        //获取裁剪操作对象
+        var cropperDom = $("#thumbImg");
+
+        //上传头像
+        $('input[name="UploadImage"]').on('change', function () {
+            ajax = new tz_ajax();
+            ajax.data({"filePath": $(this).val()}).url("<?php echo U('Media/upload_image_temp');?>").type("post");
+            ajax.upload().done(function ($res, $sta) {
+                cropperDom.attr("src", $res);
+                if ($sta == "success") {
+                    cropperDom.cropper({
+                        aspectRatio: 1 / 1,
+                        dragMode: "move",
+                    });
+                }
+            });
+        });
+
+        //清除头像
+        $('#cropperClear').on("click", function () {
+            if (!cropperDom.attr("src")) {
+                alert("请先上传头像图片");
+                return false;
+            }
+            cropperDom.cropper("destroy").attr("src", "");
+        })
+
+        //裁剪头像
+        $("#cropperSure").on("click", function () {
+            if (!cropperDom.attr("src")) {
+                alert("请先上传头像图片");
+                return false;
+            }
+            //获取截取内容 128 x 128
+            var cropped = cropperDom.cropper('getCroppedCanvas',
+                    {"width": 128, "height": 128}
+            );
+            //获取截取内容图片Base64图片码
+            var image = cropped.toDataURL("image/png");
+            $("#userThumb").attr("src", image);
+            $("#userThumbMini").attr("src", image);
+            $("input[name='userAvatar']").val(image);
+        })
+    })
+</script>

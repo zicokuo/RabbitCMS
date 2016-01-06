@@ -1,0 +1,22 @@
+@charset "UTF-8";
+
+@import "./common/_main.scss";
+
+$primaryColor: #e15514;
+$imgUrl: "./../i/";
+
+//登陆页
+
+//登陆logo字样
+.tz {
+  &-admin {
+    &-logo {
+      &-big {
+        font-size: 72px;
+      }
+      &-small {
+        font-size: 24px;
+      }
+    }
+  }
+}

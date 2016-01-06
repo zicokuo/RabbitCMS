@@ -1,0 +1,28 @@
+@charset "UTF-8";
+
+@import "../../sass/color_lib";
+
+$primaryColor: #002e4f;
+$black: #333;
+@import "../../sass/function";
+
+.w {
+  &-980 {
+    max-width: 980px;
+    margin: auto;
+  }
+}
+
+.diavision {
+  &-admin {
+    //后台专用
+    .cate {
+      &-thumb {
+        &-box {
+          text-align: center;
+          max-width: 150px;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,55 @@
+<div class="am-g-fixed am-center">
+    <form id="postFilter">
+        <div class="am-u-sm-4 am-padding">
+            <label class="am-padding-left">栏目筛选</label>
+            <select name="cate" data-am-selected="{maxHeight: 600}" minchecked="1">
+                <option value="0">全部栏目</option>
+                <volist name="cateList" id="cateOne">
+                    <option value="{$cateOne.id}">
+                        <for start="1" end="$cateOne.level">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </for>
+                        <span class="am-icon-folder-open-o"></span>
+                        {$cateOne.name}
+                    </option>
+                </volist>
+            </select>
+        </div>
+        <div class="am-u-sm-4 am-padding">
+            <div class="am-input-group am-padding-right">
+                <input name="search" type="text" class="am-form-field">
+            <span class="am-input-group-btn">
+                <button id="updatePostListBtn" class="am-btn am-btn-default" type="button">查找</button>
+            </span>
+            </div>
+        </div>
+    </form>
+    <div class="am-u-sm-4 am-padding">
+        <div class="am-btn-group">
+            <a class="am-btn am-btn-secondary" href="__CONTROLLER__/post_publish"
+                    data-ajax-btn='{"target":"#frameArea"}'>
+                <i class="am-icon-plus"></i>
+                发布新内容
+            </a>
+        </div>
+    </div>
+    <!--文章列表-->
+    <section id="PostListSection">
+    </section>
+</div>
+
+
+<script type="text/javascript">
+    $(function () {
+        updatePostList();
+        $("#updatePostListBtn").on("click", updatePostList);
+        $("#postFilter").find("select").change(updatePostList);
+        function updatePostList() {
+            $tz_ajax = new tz_ajax();
+            $tz_ajax.type("GET");
+            $tz_ajax.data($("#postFilter").serialize());
+            $tz_ajax.url('__CONTROLLER__/post_list');
+            $tz_ajax.go().updateDom($("#PostListSection"));
+        }
+    });
+</script>

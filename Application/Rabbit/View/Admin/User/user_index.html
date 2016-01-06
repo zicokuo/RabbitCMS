@@ -1,0 +1,16 @@
+<button id="updateUserListBtn" type="button" class="am-btn am-btn-default">更新</button>
+<section id="UsersSection"></section>
+<script type="text/javascript">
+    $(function(){
+        updateUserList();
+        function updateUserList() {
+            $tz_ajax = new tz_ajax();
+            $tz_ajax.type("post");
+//        $tz_ajax.data($("#postFilter").serialize());
+            $tz_ajax.url('__CONTROLLER__/user_list');
+            $tz_ajax.go().updateDom($("#UsersSection"));
+        }
+        $("#updateUserListBtn").on("click",updateUserList);
+    })
+
+</script>

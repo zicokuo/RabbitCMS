@@ -1,0 +1,53 @@
+<div id="container" name="postContent" type="text/plain">
+    {$content|html_entity_decode}
+</div>
+<switch name="type">
+    <case value="baidu">
+        <script type="text/javascript">
+            window.UEDITOR_HOME_URL = "__PUBLIC__/ueditor/";
+        </script>
+        <js href="__PUBLIC__/diavision/ueditor.config.js"/>
+        <js href="__PUBLIC__/ueditor/ueditor.all.min.js"/>
+        <js href="__PUBLIC__/ueditor/ueditor.parse.js"/>
+
+        <script type="text/javascript">
+            $(function () {
+                var ue = UE.getEditor('container');
+                ue.ready(function () {
+                    this.setContent('{$content|html_entity_decode}');
+                })
+            });
+        </script>
+    </case>
+    <case value="tiny">
+        <js href="__PUBLIC__/tinymce/tinymce.min.js"/>
+        <script type="text/javascript">
+            $(function () {
+                var tm = tinymce.init({selector: '#container',
+                    plugins: [
+                        'advlist autolink lists link image charmap print preview anchor',
+                        'searchreplace visualblocks code fullscreen',
+                        'insertdatetime media table contextmenu paste'
+                    ],
+                    toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image'});
+//                tinymce.init({
+//                    selector: '#container p',
+//                    inline: true,
+//                    toolbar: 'undo redo',
+//                    menubar: false
+//                });
+
+//                tinymce.init({
+//                    selector: '#container p',
+//                    inline: true,
+//                    plugins: [
+//                        'advlist autolink lists link image charmap print preview anchor',
+//                        'searchreplace visualblocks code fullscreen',
+//                        'insertdatetime media table contextmenu paste'
+//                    ],
+//                    toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image'
+//                });
+            })
+        </script>
+    </case>
+</switch>

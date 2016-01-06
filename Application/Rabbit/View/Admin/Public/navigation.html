@@ -1,0 +1,28 @@
+<header class="am-topbar am-topbar-inversed" data-am-sticky="{animation: 'slide-top'}">
+    <div class="am-g-fixed am-center">
+        <h1 class="am-topbar-brand">
+            {$navTitle|default="RABBIT"}
+        </h1>
+        <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only"
+                data-am-collapse="{target: '#doc-topbar-collapse'}"><span class="am-sr-only">导航切换</span>
+            <span class="am-icon-bars"></span></button>
+        <div class="am-collapse am-topbar-collapse" id="doc-topbar-collapse">
+            <ul class="am-nav am-nav-pills am-topbar-nav">
+                <volist name="menu" id="vo">
+                    <?php if($vo['url'] == ucfirst(CONTROLLER_NAME)."/".ACTION_NAME): ?>
+                    <li class="am-active">
+                        <?php else:?>
+                    <li>
+                        <?php endif;?>
+                        <a href="{$vo.url|U}">{$vo.name|__}</a>
+                    </li>
+                </volist>
+            </ul>
+            <div class="am-topbar-right">
+                <ul class="am-nav am-nav-pills am-topbar-nav">
+                        {$user_board}
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>

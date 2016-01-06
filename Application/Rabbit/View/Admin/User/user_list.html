@@ -1,0 +1,27 @@
+<div class="am-panel am-panel-default">
+    <div class="am-panel-hd am-text-center">内容列表</div>
+    <div class="am-panel-bd am-cf am-text-center">
+        <dt class="am-u-sm-1 ">编号</dt>
+        <dt class="am-u-sm-7 ">用户</dt>
+        <dt class="am-u-sm-4 ">快捷操作</dt>
+    </div>
+    <ul class="am-list am-list-static am-list-border">
+        <volist name="users" id="vo">
+            <li class="am-cf">
+                <div class="am-u-sm-1"><h3>{$vo.id}</h3></div>
+                <div class="am-u-sm-7">
+                    <div class="am-fl" style="width: 64px;">
+                        <img class="am-thumbnail" src="{$vo.thumb}"/>
+                    </div>
+                    {$vo.nick}
+                    <if condition="$vo.admin eq 1">
+                        <span class="am-badge am-badge-success">管理员</span>
+                        <else/>
+                        <span class="am-badge am-badge-secondary">一般用户</span>
+                    </if>
+                </div>
+                <div class="am-u-sm-4">暂无</div>
+            </li>
+        </volist>
+    </ul>
+</div>

@@ -1,0 +1,108 @@
+@charset "UTF-8";
+
+@import "../../sass/color_lib";
+
+$primaryColor: #002e4f;
+$black: #333;
+@import "../../sass/function";
+
+a {
+  color: $primaryColor;
+  text-decoration: none;
+  &:hover {
+    color: lighten($primaryColor, 1.5);
+  }
+}
+
+%a-white {
+  color: $white;
+  @include font_blod();
+  &:hover {
+    color: darken($white, 1.2);
+  }
+}
+
+.diavision {
+  &-thumb {
+    border: 1px $black solid;
+    display: block;
+  }
+  //主题最大宽度
+  &-maxw {
+    max-width: 992px;
+    margin: auto;
+  }
+  //页头导航样式
+  &-page {
+    &-head {
+      &-navbar {
+        a {
+          margin-left: 1em;
+        }
+      }
+    }
+  }
+  //首页样式
+  &-user {
+    &-broad {
+      &-mini {
+        position: fixed;
+        top: 0;
+        right: 5%;
+        z-index: $zindexTooltip;
+        .user-avatar {
+          width: 64px;
+          height: 64px;
+          overflow: hidden;
+          border: 1px solid $gray;
+          border-radius: 25%;
+          background-size: cover;
+        }
+      }
+    }
+  }
+  //主导航栏样式
+
+  &-navbar {
+    background-color: #002e4f;
+    @include get_shadow($black, 2*$basePix, 0, 0.5*$basePix);
+    line-height: 2.4em;
+    &-masterBtn {
+      font-size: 18px;
+      @extend %a-white;
+      padding-left: 1em;
+
+    }
+    &-list {
+      min-width: 222px;
+      position: absolute;
+      border: $black 1px solid;
+      background-color: rgba(102, 102, 102, 0.75);
+      z-index: $zindexDropdown;
+      & a {
+        font-size: 16px;
+        @extend %a-white;
+        display: block;
+        line-height: 2em;
+        border-top: $white 1px solid;
+        margin: 4px;
+        padding-left: 1em;
+        &:first-child {
+          border: none;
+        }
+      }
+    }
+    &-shareBar {
+      &-index {
+        background: $gray;
+        line-height: 2em;
+      }
+    }
+    &-footer {
+      border-top: 3px $red solid;
+      background: #252525;
+      padding: 20px;
+      padding-top: 40px;
+    }
+  }
+}

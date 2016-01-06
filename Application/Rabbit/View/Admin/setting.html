@@ -1,0 +1,94 @@
+<div class="am-g-fixed am-center">
+<h2 class="am-text-center">系统设置</h2>
+<hr>
+<div class="am-btn-group">
+<button id="freshBtn" class="am-btn am-btn-primary am-hide">更新内容</button>
+</div>
+<volist name="settings" id="vo" key="k">
+    <div class="am-padding">
+        <dt>
+            {$k}.{$vo.name}
+            <small class="am-text-warning">({$vo.summary})</small>
+        </dt>
+        <switch name="vo.type">
+            <case value="0">
+                <label class="am-radio am-secondary">
+                    <input type="radio" name="{$vo.alias}" value="1" data-am-ucheck
+                           data-type="{$vo.type}" <if condition="$vo['value'] eq 1">checked</if>
+                    >开启
+                </label>
+                <label class="am-radio am-secondary">
+                    <input type="radio" name="{$vo.alias}" value="0" data-am-ucheck
+                           data-type="{$vo.type}" <if condition="$vo['value'] eq 0">checked</if>
+                    >关闭
+                </label>
+            </case>
+            <case value="1">
+                <div class="am-input-group am-input-group-lg">
+                    <input type="text" name="{$vo.alias}" class="am-form-field" value="{$vo.value}" data-type="{$vo.type}" placeholder="空白">
+                </div>
+            </case>
+            <case value="2">
+                <div class="am-input-group am-input-group-lg">
+                    <textarea name="{$vo.alias}" value="{$vo.value}" placeholder="空白" data-type="{$vo.type}" rows="3"></textarea>
+                </div>
+            </case>
+            <case value="3">
+                <form>
+                    <?php $values = json_decode(html_entity_decode($vo['value']),true);?>
+                    <volist name="values" id="vvo">
+                        <label class="am-radio am-secondary">
+                            <input type="radio" name="{$vo.alias}" value="{$key}" data-am-ucheck data-type="{$vo.type}"
+                            <if condition="$vvo eq 1">checked</if>
+                            >{$key}
+                        </label>
+                    </volist>
+                </form>
+            </case>
+        </switch>
+    </div>
+</volist>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#freshBtn").on("click", freshPage);
+        function freshPage() {
+            $tz_ajax = new tz_ajax();
+            $tz_ajax.type("get");
+//            $tz_ajax.data($("#cateFilter").serialize());
+            $tz_ajax.url('__CONTROLLER__/setting');
+            $tz_ajax.go().updateDom($(".am-panel-bd"));
+        }
+
+        $(":input").each(function () {
+            $(this).change(function () {
+                updateSetting(this)
+            })
+        })
+        function updateSetting(e) {
+            $_this = $(e);
+            $ajax = new tz_ajax();
+            $ajax.type("post").url('__CONTROLLER__/set_submit');
+            console.log($_this.attr('data-type'))
+            if ($_this.attr('data-type') == 3) {
+                $form = $_this.parents("form");
+                var vs = "";
+                $form.find(":input").each(function(){
+                    vs += '"'+$(this).val()+'":"'+ ($(this).is($form.find(":checked"))&1)+'"';
+                    if(!$(this).is($form.find(":input").last())){
+                        vs +=',';
+                    }
+                })
+                vs = '{'+vs+'}';
+                $ajax.data("name=" + $_this.attr("name") + "&value=" +vs);
+                console.log(vs);
+            } else {
+                $ajax.data("name=" + $_this.attr("name") + "&value=" + $_this.val());
+            }
+            $ajax.send().always(function ($r, $s) {
+                $news = new tz_news();
+                $news.status($s).tips($r);
+            })
+        }
+    })
+</script>

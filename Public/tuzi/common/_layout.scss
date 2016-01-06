@@ -1,0 +1,50 @@
+@charset "UTF-8";
+//增强输出样式
+html {
+  font-size: 10px !important;
+  font-family: $baseFontFamily;
+  color: $grayDark;
+  a {
+    @extend %a;
+  }
+}
+
+$scMap: (1:"mini", 2:"small", 3:"medium", 4:"large");
+%screen {
+  @each $key, $sc in $scMap {
+    &-#{$sc} {
+      &-show {
+        @include respond-to($sc) {
+          display: inherit !important;
+        }
+        @include respond-in($sc) {
+          display: none !important;
+        }
+      }
+      &-hide {
+        @include respond-in($sc) {
+          display: inherit !important;
+        }
+        @include respond-to($sc) {
+          display: none !important;
+        }
+      }
+    }
+  }
+}
+
+//自带外间距
+%interval {
+  @include interval-space(0.4rem);
+}
+
+//中文样式
+[class^="chinese"], %chinese {
+  text-indent: 2em;
+}
+
+.inline {
+  &-block {
+    @extend %inline-block;
+  }
+}

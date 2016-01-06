@@ -1,0 +1,10 @@
+<ul class="am-nav am-nav-pills" data-am-sticky="{animation: 'slide-top'}">
+    <?php $acName = ACTION_NAME;?>
+    <li class="<?php compare_putout(ACTION_NAME,'index','am-active');?>"><a href="<?php echo U('Admin/index');?>">后台</a>
+    </li>
+    <li class="<?php compare_putout(ACTION_NAME,'post','am-active');?>"><a href="<?php echo U('Admin/post');?>">内容</a></li>
+    <li class="<?php compare_putout(ACTION_NAME,'cate','am-active');?>"><a href="<?php echo U('Admin/cate');?>">分类</a></li>
+    <li class="<?php compare_putout(ACTION_NAME,'display','am-active');?>"><a href="<?php echo U('Admin/interface');?>">显示</a></li>
+    <li class="<?php compare_putout(ACTION_NAME,'user','am-active');?>"><a href="<?php echo U('Admin/user');?>">用户</a></li>
+    <li class="<?php compare_putout(ACTION_NAME,'setting','am-active');?>"><a href="<?php echo U('Admin/setting');?>">设置</a></li>
+</ul>

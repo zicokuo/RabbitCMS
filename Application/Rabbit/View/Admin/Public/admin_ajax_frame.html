@@ -1,0 +1,32 @@
+<div id="ajaxframe" class="am-offcanvas">
+    <!--左侧内容-->
+    <div class="am-animation-delay-1 am-animation-scale-down am-panel am-panel-default {$frame['right']?'am-u-sm-8':'am-u-sm-11 am-g-fixed'} am-margin"
+         style="height: 94%;">
+         <span class="am-fr am-close am-padding" data-am-dismiss="offcanvas">
+                <i class="am-icon-close"></i>
+         </span>
+
+        <div class="am-panel-bd" style="height: 100%;">
+            <h1>{$frame.title}</h1>
+            <section id="frameLeft" style="height: 90%;overflow-y:auto;padding-right: 12px;">
+                {$frame.left}
+            </section>
+        </div>
+    </div>
+    <notempty name="frame.right">
+        <div class="am-offcanvas-bar am-offcanvas-bar-flip" style="height: 100%;">
+            <div class="am-offcanvas-content am-text-center" style="overflow-y: auto;">
+                <section id="frameRight" class="am-padding-top-lg">
+                    {$frame.right}
+                </section>
+            </div>
+        </div>
+    </notempty>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $layout = new tz_layout();
+        $layout.fullscreen($("#ajaxframe"), $(window));
+        $("#ajaxframe").offCanvas('open').off('close.offcanvas.amui').off('click.offcanvas.amui');
+    })
+</script>

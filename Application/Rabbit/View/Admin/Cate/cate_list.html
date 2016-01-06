@@ -1,0 +1,68 @@
+<div class="am-panel am-panel-default">
+    <div class="am-panel-hd am-text-center">分类列表</div>
+    <div class="am-panel-bd am-cf">
+        <dt class="am-u-sm-8">栏目信息</dt>
+        <dt class="am-u-sm-4 am-text-right">快捷操作</dt>
+    </div>
+    <ul class="am-list am-list-static">
+        <volist name="cates" id="vo">
+            <li class="am-cf">
+                <div class="am-fl">
+                    <div data-am-popover="{content:'{$vo.summary|default='暂无说明'}',trigger:'hover',}">
+                        <if condition="$vo.level gt 1">
+                            <for start="1" end="$vo.level">
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </for>
+                            <i class="am-icon-chevron-circle-up am-icon-fw"></i>
+                            <else/>
+                            <i class="am-icon-chevron-circle-right am-icon-fw"></i>
+                        </if>
+                        {$vo.name} - <span class="am-badge">别名:{$vo.alias}</span>
+                    </div>
+                </div>
+                <div class="am-btn-group-sm am-fr">
+                    <notempty name="vo.thumb">
+                        <div class="am-btn am-btn-success"
+                             data-am-popover="{content: '<div class=\'am-text-center cate-thumb-box\'><img class=\'am-img-responsive am-thumbnail\' src=\'{$vo.thumb}\'/><dt>封面预览</dt></div>', trigger: 'hover focus'}">
+                            <i class="am-icon-image am-icon-fw"></i>
+                        </div>
+                    </notempty>
+                    <button class="am-btn am-btn-secondary" data-edit-cate="{$vo.id}"
+                            data-am-popover="{content:'编辑', trigger: 'hover focus'}">
+                        <i class="am-icon-edit am-icon-fw"></i>
+                    </button>
+                    <button class="am-btn am-btn-danger" data-delete-cate="{$vo.id}"
+                            data-am-popover="{content:'删除', trigger: 'hover focus'}">
+                        <i class="am-icon-trash am-icon-fw"></i>
+                    </button>
+                </div>
+            </li>
+        </volist>
+    </ul>
+    <include file="Tpl/amui_model" id="cateDelConfirm" type="confirm" title="警告" content="你确定要删除?"/>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('[data-am-popover]').popover();
+        $("button[data-delete-cate]").on("click", function (e) {
+            $('#cateDelConfirm').modal({
+                relatedTarget: this,
+                onConfirm: function (options) {
+                    var $link = $(this.relatedTarget);
+                    var msg = $link.length ? '你要删除的链接 ID 为 ' + $link.data('delete-post') : '确定了，但不知道要整哪样';
+                    $sysAjax = new tz_ajax();
+                    $sysAjax.type("post").url('__CONTROLLER__/cate_del').data("id=" + $link.data("delete-cate")).go().alert();
+                    $("#updateCateListBtn").click();
+                },
+//                closeOnConfirm: false,
+                onCancel: function () {
+                }
+            });
+        })
+        $("button[data-edit-cate]").on("click", function (e) {
+            $sysAjax = new tz_ajax();
+            $sysAjax.type("post").url('__CONTROLLER__/cate_insert').data("id=" + $(this).data("edit-cate")).go().updateDom($("#cateInsertSection"));
+        });
+    })
+</script>
+

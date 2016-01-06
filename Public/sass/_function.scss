@@ -1,0 +1,12 @@
+@charset "UTF-8";
+
+//字体加粗
+@mixin font_blod() {
+  font-weight: 900;
+}
+
+//添加阴影
+@mixin get_shadow($color,$eclosion:5px,$x:0px,$y:0px) {
+  box-shadow: $color $x $y $eclosion;
+  -web-kit-box-shadow:$color $x $y $eclosion;
+}

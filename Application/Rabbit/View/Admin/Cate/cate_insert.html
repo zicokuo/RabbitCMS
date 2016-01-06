@@ -1,0 +1,93 @@
+<div class="am-panel am-panel-default">
+    <div class="am-panel-hd am-text-center">
+        {$cate?"编辑栏目":"新增栏目"}
+    </div>
+    <form id="insertCateForm" class="am-form am-padding am-padding-bottom-0" data-am-validator>
+        <fieldset>
+        <div class="am-form-group am-text-center">
+            <dd>栏目名称</dd>
+            <input name="cateName" type="text" class="am-form-field" minlength="2" placeholder="中文名"
+                   value="{$cate.name}" required>
+            <dd>栏目别名</dd>
+            <input name="cateAlias" type="text" class="am-form-field" placeholder="别名,不填则系统自动生成"
+                   data-am-popover="{content: '<small>栏目别名主要用于系统内部栏目识别<br>部分设定功能会涉及</small>', trigger: 'hover focus'}"
+                   value="{$cate.alias}">
+            <dd>上级栏目</dd>
+            <select name="cateParent" data-am-selected="{btnWidth: '100%',placeholder:'选择栏目',searchBox:1}">
+                <option value="0"
+                <?php echo ($cate['parent'] == 0)?"selected":"";?>
+                >根目录</option>
+                <volist name="cates" id="cateOne">
+                    <option value="{$cateOne.id}"
+                    <?php echo ($cate['parent'] == $cateOne['id'])?"selected":"";?>
+                    >
+                    {$cateOne.name}
+                    </option>
+                </volist>
+            </select>
+            <dd>栏目封面</dd>
+            <div class="am-form-group am-form-file">
+                <button type="button" class="am-btn am-btn-danger am-btn-block">
+                    <i class="am-icon-cloud-upload"></i>选择要上传的封面
+                </button>
+                <input name="cateThumb" id="cateThumb" type="file"/>
+                <img id="cateThumbImg" class="am-img-thumbnail" src="{$cate.thumb}"/>
+                <input name="cateThumbUrl" id="cateThumbUrl" type="hidden" value="{$cate.thumb}"/>
+                <script>
+                    $(function () {
+                        $('#cateThumb').on('change', function () {
+                            var cateThumb_ajax = new tz_ajax();
+                            cateThumb_ajax.data({"filePath": $(this).val()}).url("<?php echo U('Admin/cateImgUpload');?>").type("post");
+                            cateThumb_ajax.upload().done(function ($res, $sta) {
+                                $("#cateThumbImg").attr("src", $res);
+                                if ($sta == "success") {
+                                    $("#cateThumbUrl").val($res);
+                                }
+                            });
+                        });
+                    });
+                </script>
+            </div>
+            <button id="cateThumbCancel" class="am-btn am-btn-block am-btn-danger">移除封面</button>
+
+        </div>
+        <empty name="cate">
+            <input type="hidden" name="submitMod" value="insert"/>
+            <else/>
+            <input type="hidden" name="submitMod" value="update"/>
+            <input type="hidden" name="cateId" value="{$cate.id}"/>
+        </empty>
+        <empty name="cate">
+            <button type="submit" id="cateInsertSubmit" class="am-btn am-btn-block am-btn-success">添加栏目</button>
+            <else/>
+            <button type="submit" id="cateUpdateSubmit" class="am-btn am-btn-block am-btn-secondary">修改栏目</button>
+        </empty>
+            </fieldset>
+    </form>
+
+    <script type="text/javascript">
+        $(function () {
+            $("#cateInsertSubmit").on("click", function () {
+                var cateInsert_ajax = new tz_ajax();
+                cateInsert_ajax.type("post").data($("#insertCateForm").serialize());
+                cateInsert_ajax.url("<?php echo U('Admin/cate_submit')?>");
+                cateInsert_ajax.go().alert();
+                $("#updateCateListBtn").click();
+            })
+            $("#cateUpdateSubmit").on("click", function () {
+                var cateInsert_ajax = new tz_ajax();
+                cateInsert_ajax.type("post").data($("#insertCateForm").serialize());
+                cateInsert_ajax.url("<?php echo U('Admin/cate_submit')?>");
+                cateInsert_ajax.go().alert();
+                $("#updateCateListBtn").click();
+            })
+            $('#cateThumbCancel').on("click", function () {
+                $("#cateThumbImg").attr("src", "");
+                $("#cateThumbUrl").val("");
+                return false;
+            })
+            $('[data-am-selected ]').selected();
+            $('[data-am-popover]').popover();
+        })
+    </script>
+</div>

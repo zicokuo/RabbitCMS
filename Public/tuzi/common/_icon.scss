@@ -1,0 +1,17 @@
+@charset "UTF-8";
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/*
+    Created on : 2015-5-1, 0:57:30
+    Author     : Zicokuo
+*/
+
+[class^="i-"], [class*="i-"] {
+    @include inline-block();
+    overflow: hidden;
+    position: relative; }
+
+

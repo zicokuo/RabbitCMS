@@ -1,0 +1,35 @@
+<css href="__PUBLIC__/diavision/css/diavision-user.css"/>
+<div class="diavision-user-broad-mini am-text-center " style="z-index:1800;">
+    <button id="userBroadMiniToggleBtn" class="am-btn am-btn-primary"
+            data-am-collapse="{target: '#userBroadMini-collapse-nav'}"><i
+            class="am-icon-bars am-icon-fw"></i>用户菜单
+    </button>
+    <nav>
+        <ul id="userBroadMini-collapse-nav" class="am-nav am-panel am-panel-default am-text-center am-collapse">
+            <div class="user-avatar am-center am-margin-top"
+                 style="width: 96px;">
+                <img src="{$user.avatar}" class="am-img-thumbnail"/>
+            </div>
+
+            <dt>{$user_cur.nick}</dt>
+            <dd>{$user_cur.identName}</dd>
+
+            <dd>你好!</dd>
+            <div class="am-btn-group am-btn-group-justify">
+                <if condition="$user.nick eq '访客'">
+                    <a href="<?php echo U('Admin/user_enter');?>" class="am-btn am-btn-primary">
+                        <i class="am-icon-sign-in am-icon-fw"></i>
+                    </a>
+                    <else/>
+                    <a class="am-btn am-btn-sm am-btn-default" href="__APP__/User/index">
+                        <i class="am-icon-user am-icon-fw"></i>
+                    </a>
+                    <a href="<?php echo U('Admin/user_enter');?>?subMod=logout" class="am-btn am-btn-danger">
+                        <i class="am-icon-sign-out am-icon-fw"></i>
+                    </a>
+                </if>
+            </div>
+
+        </ul>
+    </nav>
+</div>

@@ -1,0 +1,19 @@
+<button id="updateTemListBtn" type="button" class="am-btn am-btn-default">更新</button>
+<section id="templateSection" class="am-g-fixed am-center">
+
+</section>
+<script type="text/javascript">
+    $(function () {
+        updateTemList();
+        function updateTemList() {
+            $tz_ajax = new tz_ajax();
+            $tz_ajax.type("post");
+//        $tz_ajax.data($("#postFilter").serialize());
+            $tz_ajax.url('__CONTROLLER__/template_list');
+            $tz_ajax.go().updateDom($("#templateSection"));
+        }
+
+        $("#updateTemListBtn").on("click", updateTemList);
+    })
+
+</script>

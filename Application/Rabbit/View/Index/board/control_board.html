@@ -1,0 +1,19 @@
+<div class="am-g-fixed am-center am-cf">
+    <div class="am-u-sm-4">
+        <div class="am-panel am-panel-default">
+            <div class="am-panel-hd">
+                {$board.title|default=__("board title")}
+            </div>
+            <div class="am-list am-list-static">
+                <?php $menu = C("MENU.WEBSITE_BOARD_MENU");?>
+                <volist name="menu" id="vo">
+                    <li><a href="__APP__/{$vo.url}" data-ajax-btn="{target:'#boardContent'}">{$vo.name|__}</a></li>
+                </volist>
+            </div>
+        </div>
+    </div>
+    <div class="am-u-sm-8">
+        <div class="am-panel am-panel-default " id="boardContent">
+        </div>
+    </div>
+</div>

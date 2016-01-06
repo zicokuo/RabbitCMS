@@ -1,0 +1,96 @@
+<div id="postView{$post.id}" class="am-offcanvas">
+    <!--左侧内容-->
+    <div class="am-panel am-panel-default am-u-sm-offset-1 am-u-sm-8 am-margin" style="height: 94%;">
+        <span class="am-fr am-close am-padding" data-am-dismiss="offcanvas">
+                <i class="am-icon-close"></i>
+         </span>
+        <div class="am-panel-bd" style="height: 100%;">
+            <section id="postViewSection" style="height: 100%;">
+                <h1>{$post.title}</h1>
+                <small>
+                    <i class="am-icon-user am-icon-fw"></i>
+                    作者:{$post.author}
+                    <i class="am-icon-clock-o am-text-success am-icon-fw"></i>发布时间:
+                    {$post.createtime|date="Y年m月d日 h:i.a",###}
+                    <i class="am-icon-clock-o am-text-primary am-icon-fw"></i>最后更新:
+                    {$post.updatetime|date="Y年m月d日 h:i.a",###}
+                </small>
+                <hr>
+                <div style="overflow:hidden; overflow-y: auto;height: 75%;">
+                    <div class="am-cf am-g">
+                        {$post.content|htmlspecialchars_decode}
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <div class="am-offcanvas-bar am-offcanvas-bar-flip" style="height: 100%;">
+        <div class="am-offcanvas-content am-text-center" style="overflow-y: auto;">
+            <br>
+
+            <div class="am-text-lg"><i class="am-icon-eye am-icon-fw"></i>
+                查看:123
+                <i class="am-icon-heart am-icon-fw am-text-danger"></i>
+                喜欢:456
+            </div>
+            <h3>栏目</h3>
+            <?php $cates = S("CATES_ALL");?>
+            <?php echo $cates[$post['category']]['name'];?>
+            <h3>封面</h3>
+            <empty name="$post.thumb">
+                <img src="{$post.thumb}" class="am-img-thumbnail"/>
+                <else/>
+                暂无
+            </empty>
+
+            <h3>快捷操作</h3>
+
+            <div class="am-btn-group-lg">
+                <a class="am-btn am-btn-default" href="__CONTROLLER__/post_publish/pid/{$post.id}"><i
+                        class="am-icon-edit am-icon-fw"></i><br>
+                    <small>编辑</small>
+                </a>
+                <button class="am-btn am-btn-default" data-share-post="{$post.id}">
+                    <i class="am-icon-reply am-icon-fw"></i><br>
+                    <small>分享</small>
+                </button>
+                <button class="am-btn am-btn-danger" data-delete-post="{$post.id}">
+                    <i class="am-icon-trash am-icon-fw"></i><br>
+                    <small>删除</small>
+                </button>
+            </div>
+            <h3>其他信息</h3>
+
+            <div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $layout = new tz_layout();
+        $layout.fullscreen($("#postView{$post.id}"), $(window));
+        $("#postView{$post.id}").offCanvas('open');
+        $("#postView{$post.id}").off('close.offcanvas.amui').off('click.offcanvas.amui');
+        $("#postView{$post.id} button[data-delete-post]").on("click", function (e) {
+            $('#postDelAlert').modal({
+                relatedTarget: this,
+                onConfirm: function (options) {
+                    var $link = $(this.relatedTarget);
+                    var msg = $link.length ? '你要删除的链接 ID 为 ' + $link.data('delete-post') : '确定了，但不知道要整哪样';
+                    $ajax = new tz_ajax();
+                    $ajax.url('__CONTROLLER__/post_del');
+                    $ajax.data("id=" + $link.data("delete-post"));
+                    $ajax.type("post").go().alert();
+                    $("#updatePostListBtn").click();
+                    $("#postView{$post.id}").offCanvas('close');
+                },
+                // closeOnConfirm: false,
+                onCancel: function () {
+                    alert('三思而后行');
+                }
+            });
+        })
+    })
+</script>

@@ -1,0 +1,19 @@
+@charset "UTF-8";
+
+@import "../../sass/color_lib";
+
+$primaryColor: #002e4f;
+$black: #333;
+@import "../../sass/function";
+
+.diavision{
+  &-user {
+    &-broad{
+      &-mini{
+        position: fixed;
+        right: 5%;
+        top:0;
+      }
+    }
+  }
+}

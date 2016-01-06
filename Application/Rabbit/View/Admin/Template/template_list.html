@@ -1,0 +1,30 @@
+<h1 class="am-text-center">模板</h1>
+<div class="am-panel am-panel-default">
+    <div class="am-panel-bd am-cf am-text-center">
+        <div class="am-g">
+        </div>
+        <dt class="am-u-sm-1 ">编号</dt>
+        <dt class="am-u-sm-1 ">状态</dt>
+        <dt class="am-u-sm-6 ">内容标题</dt>
+        <dt class="am-u-sm-4 ">快捷操作</dt>
+    </div>
+    <ul class="am-list  am-list-static">
+        <volist name="templates" id="vo">
+            <li class="am-cf">
+                <div class="am-u-sm-1 ">{$vo.id}</div>
+                <div class="am-u-sm-1 ">
+                    <switch name="vo.status">
+                        <case value="-1">
+                            <span class="am-badge am-badge-default">已禁用</span>
+                        </case>
+                        <case value="0">
+                            <span class="am-badge am-badge-success">使用中</span>
+                        </case>
+                    </switch>
+                </div>
+                <div class="am-u-sm-6 ">{$vo.name}</div>
+                <div class="am-u-sm-4 ">暂无</div>
+            </li>
+        </volist>
+    </ul>
+</div>

@@ -1,0 +1,329 @@
+@charset "UTF-8";
+
+// *************定义mixin*************
+
+//过渡动画 - trans
+@mixin trans($obj:all,$speed:0.25s){
+    -webkit-transition: #{$obj} $speed ease;
+    -moz-transition: #{$obj} $speed ease;
+    -ms-transition: #{$obj} $speed ease;
+    -o-transition: #{$obj} $speed ease;
+    transition: #{$obj} $speed ease;
+}
+
+
+//线性过渡填充色 - line grad & line-grad-ver
+@mixin line-grad ($name,$a,$b){
+    #{$name} :linear-gradient(to bottom,$a 0,$b 100%);
+    #{$name} :webkit-linear-gradient(top,$a 0,$b 100%);
+}
+@mixin line-grad-ver($name,$a,$b){
+    #{$name} :linear-gradient(to right,$a 0,$b 100%);
+    #{$name} :webkit-linear-gradient(left,$a 0,$b 100%);
+}
+
+//阴影 - shadow
+@mixin shadow($color:$grayDark,$blur:10px,$pre:'box'){
+    #{$pre}-shadow: 0 0 $blur $color;
+    -web-kit-#{$pre}-shadow: 0 0 $blur $color;
+}
+
+// border
+@mixin border($pix:0.1em,$color:#333,$dires:'',$style:solid){
+    @if $dires == ''{
+        border:$pix $style $color;
+    } @else{
+        @each $dire, $pixs in $dires{
+            border-#{$dire} : if($pixs=='',$pix,$pixs) $style $color;
+        }
+    }
+}
+@mixin pm($method,$dires:'',$pix:0.3em){
+    @if $dires == ''{
+        #{$method}:$pix;
+    } @else{
+        @each $dire, $pixs in $dires{
+            #{$method}-#{$dire} : if($pixs=='',$pix,$pixs);
+        }
+    }
+}
+
+// 背景地址
+@mixin bgurl($fileName,$arguments:'',$urlPath: "/imgs/"){
+    background:url("#{$urlPath}#{$fileName}") #{$arguments};
+
+}
+
+@mixin batchClass($pre:'',$classList:''){
+    @each $cla, $color in $classList {
+        @if($pre=='') {
+            &-#{$cla} {
+                background:$color;
+            }
+        }@else{
+            #{$pre}-#{$cla} {
+                background:$color;
+            }
+        }
+    }
+}
+
+$pixDefault:0.3em;
+// 内边距和外边距
+@mixin pm($method,$dires:'',$pix:0.3em){
+    @if $dires == ''{
+        #{$method}:$pix;
+    } @else{
+        @each $dire, $pixs in $dires{
+            #{$method}-#{$dire} : if($pixs=='',$pix,$pixs);
+        }
+    }
+}
+@mixin pad($dires){
+    @include pm('padding',$dires);
+}
+@mixin marg($dires){
+    @include pm('margin',$dires);
+}
+
+
+// 背景地址
+@mixin bgImg($fileName,$arguments:'',$urlPath: $imgPath){
+    background:url("#{$urlPath}#{$fileName}") #{$arguments};
+}
+//test
+@mixin batchClass($pre:'',$classList:''){
+    @each $cla, $color in $classList {
+        @if($pre=='') {
+            &-#{$cla} {
+                background:$color;
+            }
+        }@else{
+            #{$pre}-#{$cla} {
+                background:$color;
+            }
+        }
+    }
+}
+@mixin shadow3d(){
+    box-shadow: rgb(17, 23, 29) 1px 1px,
+        rgb(17, 23, 29) 2px 2px,
+        rgb(17, 23, 29) 3px 3px,
+        rgb(17, 23, 29) 4px 4px,
+        rgb(17, 23, 29) 5px 5px,
+        rgb(17, 23, 29) 6px 6px,
+        rgb(17, 23, 29) 7px 7px,
+        rgb(17, 23, 29) 8px 8px,
+        rgb(17, 23, 29) 9px 9px,
+        rgb(17, 23, 29) 10px 10px,
+}
+@mixin up-down-space($pix:0px){
+    &:first-of-type{
+        margin-top: $pix;
+    }
+    &:last-of-type{
+        margin-bottom:$pix;
+    }
+}
+@mixin left-right-space($pix:0px){
+    &:first-of-type{
+        margin-left:$pix;
+    }
+    &:last-of-type{
+        margin-right:$pix;
+    }
+}
+@mixin interval-space($pix:$basePix){
+    & ~ &{
+        margin:{
+            left:$pix;
+            right:$pix;
+        }
+    }
+}
+
+@mixin xy($x,$y){
+    left:#{$x}px;
+    top:#{$y}px;
+}
+
+@mixin icon-position($x:0,$y:0){
+    background-position-x:#{$x}px;
+    background-position-y:#{$y}px;
+    background-position:#{$x}px #{$y}px;
+}
+@mixin icon($iconImgName,$iconImgPath,$w,$h){
+    height:#{$w};
+    @include inline-block;
+    width:#{$h};
+    @include bgImg($iconImgName,"no-repeat center",$iconImgPath);
+    background-size: cover;
+
+}
+
+//断点管理
+$breakpoints-to: (
+'mini'   : ( max-width:  359px ),
+'small'  : ( max-width:  479px ),
+'medium' : ( max-width:  1023px ),
+'large'  : ( max-width: 1679px )
+);
+
+@mixin respond-to($name) {
+
+  // If the key exists in the map
+    @if map-has-key($breakpoints-to, $name) {
+        // Prints a media query based on the value
+        @media #{inspect(map-get($breakpoints-to, $name))} {
+            @content;
+        }
+    }
+
+    // If the key doesn't exist in the map
+    @else {
+        @warn "Unfortunately, no value could be retrieved from `#{$breakpoint}`. "
+        + "Please make sure it is defined in `$breakpoints` map.";
+    }
+}
+
+$breakpoints: (
+'mini'   : ( min-width:  360px ),
+'small'  : ( min-width:  480px ),
+'medium' : ( min-width:  1024px ),
+'large'  : ( min-width: 1680px )
+);
+@mixin respond-in($name) {
+    // If the key exists in the map
+    @if map-has-key($breakpoints, $name) {
+        // Prints a media query based on the value
+        @media #{inspect(map-get($breakpoints, $name))} {
+            @content;
+        }
+    }
+
+    // If the key doesn't exist in the map
+    @else {
+        @warn "Unfortunately, no value could be retrieved from `#{$breakpoint}`. "
+        + "Please make sure it is defined in `$breakpoints` map.";
+    }
+}
+
+$breakpoints-min: (
+'mini'   : ( min-width:  360px ),
+'small'  : ( min-width:  640px ),
+'medium' : ( min-width:  1024px ),
+'large'  : ( min-width: 1680px )
+);
+$breakpoints-max: (
+'mini'   : ( max-width:  359px ),
+'small'  : ( max-width:  639px ),
+'medium' : ( max-width:  1023px ),
+'large'  : ( max-width: 1679px )
+);
+@mixin respond-at($minname,$maxname) {
+    // If the key exists in the map
+    @if map-has-key($breakpoints-min, $minname) && map-has-key($breakpoints-max, $maxname) {
+        // Prints a media query based on the value
+        @media #{inspect(map-get($breakpoints-min, $minname))} and  #{inspect(map-get($breakpoints-max, $maxname))} {
+            @content;
+        }
+    }
+
+    // If the key doesn't exist in the map
+    @else {
+        @warn "Unfortunately, no value could be retrieved from `#{$breakpoint}`. "
+        + "Please make sure it is defined in `$breakpoints` map.";
+    }
+}
+
+//自适应一般字体
+@mixin adaptive-fontSize($fontSize:1.0rem){
+    @include respond-to(mini){
+        font-size: 1.2*$fontSize;
+    }
+    @include respond-at(mini,small){
+        font-size: 1.4*$fontSize;
+    }
+    @include respond-in(small){
+        font-size: 1.6*$fontSize;
+    }
+}
+
+//自适应放大字体
+@mixin adaptive-scale-font($fontSize:1.0rem){
+    @include respond-to(mini){
+        font-size: 1.0 * $fontSize;
+    }
+    @include respond-at(mini,small){
+        font-size: 1.2 * $fontSize;
+    }
+    @include respond-at(small,medium){
+        font-size: 1.4 * $fontSize;
+    }
+    @include respond-in(medium){
+        font-size: 1.6 * $fontSize;
+    }
+}
+//自适应放大高宽
+@mixin adaptive-scale-size($gao:1.0rem,$kuan:1.0rem){
+    @include respond-to(mini){
+        width:$gao;
+        height:$kuan;
+    }
+    @include respond-at(mini,small){
+        width:1.2*$gao;
+        height:1.2*$kuan;
+    }
+    @include respond-at(small,medium){
+        width:1.4*$gao;
+        height:1.4*$kuan;
+    }
+    @include respond-in(medium){
+        width:1.6*$gao;
+        height:1.6*$kuan;
+    }
+}
+//自适应行距
+@mixin adaptive-lineHeight($line-height:1.6){
+    line-height:$line-height;
+    @include respond-to(mini){
+        line-height:0.75*$line-height;
+    }
+    @include respond-at(mini,small){
+        line-height:0.875*$line-height;
+    }
+}
+
+//自适应一般图片
+@mixin adaptive-picture($grade:small){
+    @include respond-to($grade){
+        width:100%;
+        margin:auto;
+    }
+}
+
+//自适应界限 - 宽度
+@mixin adaptive-limit-width($max:null,$min:null){
+    @if $max!=null{
+        max-width:$max;
+    }
+    @if $min!=null{
+        min-width:$min;
+    }
+}
+
+//自适应界限 - 高度
+@mixin adaptive-limit-height($max:null,$min:null){
+    @if $max!=null{
+        max-height:$max;
+    }
+    @if $min!=null{
+        min-height:$min;
+    }
+}
+
+
+
+
+
+

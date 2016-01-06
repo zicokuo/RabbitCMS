@@ -1,0 +1,9 @@
+<div class=" am-g-fixed am-text-center">
+    <?php if(isset($message)) {?>
+    <h1><span class="am-icon-btn am-success am-icon-check am-text-xl"></span></h1>
+    <p class="success"><?php echo($message); ?></p>
+    <?php }else{?>
+    <h1><span class="am-icon-btn am-danger am-icon-close am-text-xl"></span></h1>
+    <p class="error"><?php echo($error); ?></p>
+    <?php }?>
+</div>
