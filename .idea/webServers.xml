@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="42225514-3e5b-465f-b979-fefdd3dff613" name="腾讯云" url="http://182.254.232.54">
+        <fileTransfer host="182.254.232.54" port="21" rootFolder="/dev" password="dfd8dfcbdfc3dfc4df9bdf93df92df9ddf93df99df8b" username="FTPUser">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
